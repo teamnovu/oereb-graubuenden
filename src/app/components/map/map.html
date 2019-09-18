@@ -1,0 +1,67 @@
+<div id="map" class="map" ngeo-map="map.map"></div>
+
+<div class="infobox" id="infobox">
+  <div class="oereb-marker">
+      <img src="assets/images/oereb_marker.svg" alt="{{'markerAlt' | translate}}" />
+  </div>
+
+    <div ng-if="map.infoboxLoading">
+        {{'infobox_loading' | translate}}
+    </div>
+
+    <div ng-if="!map.infoboxLoading && map.selectedPoint.length > 0">
+        <strong>{{ 'infobox_property' | translate }}</strong>
+
+        <ul>
+            <li ng-repeat="ele in map.selectedPoint">
+                <button ng-if="map.currentEgrid != ele.egrid" ng-click="map.openDetail(ele.egrid)" ng-mobile-click="map.openDetail(ele.egrid)" class="clickable">{{'infobox_plot' | translate}} {{ele.number}}</button>
+                <button ng-if="map.currentEgrid == ele.egrid" ng-click="map.showDetail(ele.egrid)" ng-mobile-click="map.showDetail(ele.egrid)" class="clickable">{{'infobox_plot' | translate}} {{ele.number}} ({{'active' | translate}})</button>
+            </li>
+        </ul>
+    </div>
+
+    <div ng-if="!map.infoboxLoading && map.selectedPoint.length == 0">
+        <div>{{'no_property_found' | translate}}</div>
+    </div>
+</div>
+
+<div class="map-nav" ngeo-recenter ngeo-recenter-map="::map.map">
+    <button class="button svg-icon btnSearch" ng-click="map.toggleSearch()">
+        <svg class="icon icon-search">
+            <use xlink:href="#icon-search"></use>
+        </svg>
+    </button>
+
+    <search></search>
+
+    <button class="button svg-icon btnGetLocation" ng-click="map.geolocate()">
+        <svg class="icon icon-location-2">
+            <use xlink:href="#icon-location-2"></use>
+        </svg>
+    </button>
+    <button ng-if="map.currentEgrid != 0" class="button svg-icon btnCenterObject" ng-click="map.centerObject()">
+            <svg class="icon icon-zoomToCenter">
+                <use xlink:href="#icon-zoomToCenter"></use>
+            </svg>
+    </button>
+    <button ng-click="map.zoomIn()" class="button svg-icon btnZoomIn hide-for-small-only">
+        <svg class="icon icon-plus">
+            <use xlink:href="#icon-plus"></use>
+        </svg>
+    </button>
+    <button ng-click="map.zoomOut()" type="button" class="button svg-icon btnZoomOut hide-for-small-only">
+        <svg class="icon icon-minus">
+            <use xlink:href="#icon-minus"></use>
+        </svg>
+    </button>
+    <button class="button svg-icon btnMapAerial" ng-click="map.setView('satellite')" ng-if="map.activeLayer != 'satellite'">
+        <svg class="icon icon-aerial">
+            <use xlink:href="#icon-aerial"></use>
+        </svg>
+    </button>
+    <button class="button svg-icon btnMapOrtho" ng-click="map.setView('map')" ng-if="map.activeLayer != 'map'">
+        <svg class="icon icon-map">
+            <use xlink:href="#icon-map"></use>
+        </svg>
+    </button>
+</div>

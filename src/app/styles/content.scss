@@ -1,0 +1,106 @@
+// All content styles
+
+// Global
+
+* {
+   box-sizing: border-box;
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+   font-smoothing: antialiased;
+   text-rendering: optimizeLegibility;
+   text-shadow:none;
+}
+// Images
+
+
+
+// Typography
+.article {
+  strong {
+    @include fontBold;
+  }
+
+
+  // Links
+  p, table {
+    @include contentLightLinks;
+    hyphens: auto;
+  }
+  h1, h2, h3, h4, h5 {
+    @include contentLightLinks;
+    @include fontBold;
+  }
+  h1, h2, h3, h4, h5 {
+    @include contentLightLinks;
+    @include fontBold;
+    line-height: $fontLineHeightBase - 20%;
+    margin-bottom:1em;
+    font-size:$fontSizeBase * 2;
+    color: $colorHeader;
+  }
+  h2, h3 {
+    font-size:$fontSizeBase * 1.5;
+    margin-bottom:0.5rem;
+    margin-top:2rem;
+  }
+  h1 {
+    margin-top:5rem;
+  }
+
+  h2 {
+    margin-bottom:0rem;
+    margin-top:3rem;
+  }
+
+  h3 {
+    font-size:$fontSizeBase * 1.2;
+  }
+
+
+  // Table
+  table {
+    td {
+      vertical-align: top;
+      line-height: $fontLineHeightBase;
+    }
+  }
+
+  // Lists
+  ul, ol {
+    margin-left:2rem;
+  }
+
+}
+
+// Typography not within article-tag
+.mainnav {
+  h1 {
+    @include fontNormal;
+    font-size:$fontSizeBase * 1.4;
+    line-height: $fontLineHeightBase - 0%;
+    margin:0px 0px 12px 0px;
+    padding:0;
+  }
+}
+
+// End typography not withung article-tag
+
+// Nedia Queries for different content sizes
+// Medium
+@media screen and (min-width: $widthMedium) and (max-width: $widthLarge - 1px)  {
+
+
+
+}
+
+// Small
+@media screen and (max-width: $widthSmall)  {
+// Within mainnav
+.mainnav {
+  h1 {
+    font-size: $fontSizeBase * 1.1;
+  }
+}
+// end within mainnav
+
+}

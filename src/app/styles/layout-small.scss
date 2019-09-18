@@ -1,0 +1,210 @@
+// Small Layout
+@media screen and (max-width: $widthSmall)  {
+
+  // Header
+  .header {
+    .menu-nav {
+      .lang-selector {
+        display: none !important;
+      }
+
+      .menu-opener {
+        // min-width:200px;
+        p {
+          //min-width:150px;
+          padding-left:0em;
+        }
+      }
+    }
+  }
+
+  // wrapper inner
+  .wrapper-inner {
+    .position-left {
+      left: ($menuOffset - $corrfactorS) * -1;
+      width:($menuOffset - $corrfactorS);
+      max-width: ($menuOffset - $corrfactorS);
+      transform:translateX(($menuOffset - $corrfactorS) * -1);
+
+      // Menu is open
+      &.active-menu {
+        left:$menuOffset - $corrfactorS;
+      }
+    }
+  }
+
+
+  // Nav-close-button
+  .nav-close {
+    right:20px;
+    top:50px;
+  }
+
+  // end nav-close-button
+
+
+  // Notifications
+  .notification-wrapper {
+    width:100%;
+  }
+  // Ende Notfications
+
+  // Start mainnav
+  .mainnav {
+      font-size:$fontSizeBase * 1;
+      line-height:$fontLineHeightBase;
+      .icon {
+        height:1rem;
+      }
+
+      .pdf-download {
+        .small-12 {
+          margin-bottom:10px;
+        }
+      }
+
+      // Header
+      v-pane-header::after,
+      v-pane-header::before {
+
+        width:16px !important;
+
+      }
+
+      v-pane-header {
+        div { // ng-transclude
+          padding-right:30% !important;
+        }
+        .badge {
+          &.secondary {
+            color:$colorWhite;
+            right:35px !important;
+          }
+        }
+      }
+
+
+      h1 {
+        font-size:$fontSizeBase * 1.22;
+        line-height: $fontLineHeightBase - 20%;
+        margin-bottom:5px;
+      }
+      .info-date {
+        font-size:$fontSizeBase * 0.9;
+      }
+      v-pane-header, v-pane-content, v-pane-content h3 {
+        font-size:$fontSizeBase * 1 !important;
+        line-height: $fontLineHeightBase - 20% !important;
+      }
+      v-pane-content {
+        ul {
+          li {
+            font-size: $fontSizeBase * 0.88 !important;
+          }
+        }
+        v-pane-content {
+          v-pane-header {
+
+            padding-left:10px !important;
+
+          }
+
+          restriction {
+            padding-left:22px !important;
+          }
+        }
+
+        .row {
+          .oereb-value {
+            padding-right:10px;
+
+          }
+        }
+      }
+
+
+      .intro-row {
+        margin: 0;
+          
+        .info-date {
+          margin-top:0.25rem;
+        }
+      }
+
+      .pdf-download {
+        .small-12 {
+          margin-bottom:10px;
+        }
+      }
+
+      v-accordion[class^='vAccordion']  {
+        .restrictions {
+          v-pane-content {
+            > div {
+              v-accordion {
+                v-pane {
+                  v-pane-header {
+                    font-size: $fontSizeBase * .88 !important;
+                  }
+                }
+              }
+            }
+          }   
+        }
+      }
+         
+
+  }
+
+
+
+
+  // history
+  .history-item {
+    .logo-gemeinde {
+
+      width:28px !important;
+    }
+
+
+  }
+
+  // end history
+
+  // map
+  .map {
+    .infobox {
+      li {
+        font-size:$fontSizeBase * 1.1;
+        padding:5px 0px 5px 0px;
+      }
+    }
+  }
+  // end map
+
+
+  // Start glossary
+  .contentglossary {
+
+      dl {
+        flex-basis:100% !important;
+        width:100% !important;
+        padding-right:10px !important;
+    }
+  }
+  // end glossary
+
+  // start imprint
+  .contentimpressum {
+    .section, .partner-logo {
+      .section-item, .logo-item {
+        width:100% !important;
+        flex-basis:100% !important;
+        padding-right:10px !important;
+      }
+    }
+  }
+  // end imprint
+
+
+ } // END Medium Layout

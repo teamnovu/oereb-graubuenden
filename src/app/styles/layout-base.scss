@@ -1,0 +1,999 @@
+// Base Layout for all widths
+// Disabling Buttons for swisstopo maps
+.ol-control {
+  visibility: hidden;
+  display:none;
+}
+
+
+// basic content
+body {
+  @include fontNormal();
+  z-index:10;
+  background-color: $colorContentBgnd;
+  // Accessibility goes down the drain...
+  button {
+    outline:0 !important; // this might be an accessibility issue!
+  }
+
+}
+
+// changed global foundation styles
+.row {
+  max-width:100%;
+}
+// stop changed global foundation styles
+
+
+
+// Left slider
+.wrapper-inner {
+  overflow:hidden;
+  //height:100vh;
+
+
+  position:absolute;
+  top:0px;
+  left:0px;
+  bottom:0px;
+  right:0px;
+
+
+
+
+  .position-left {
+    padding-top:3em;
+    position:absolute;
+    //height:100vh;
+    left: $menuOffset * -1;
+    width:$menuOffset;
+    max-width: $menuOffset;
+    z-index:5;
+    overflow-y:auto;
+    @include castShadowRight;
+    background-color: $colorMenuBgnd;
+    transition: all ease 1s;
+    transform:translateX($menuOffset * -1);
+    height:100%;
+    //height:0px;
+    overflow-y: scroll;
+    // Menu is open
+    &.active-menu {
+      transition: all ease 1s;
+      left:$menuOffset;
+    }
+  }
+
+
+}
+
+
+// end left slider
+
+// SVG-Icons
+// Default behaviour
+.button {
+  @include button_svg();
+}
+.icon {
+  @include icon_svg();
+  margin:1px 1px 0px 0px;
+
+  &.icon-reload {
+    margin-right:2px;
+    font-size:1rem;
+    vertical-align: bottom;
+  }
+}
+// End SVG-Icons
+
+// Close content-view
+.nav-close {
+  position:fixed;
+  right:10px;
+  top:100px;
+
+  .button {
+    background-color:rgba($colorDarkGrey,0.9);
+    @include rounded;
+    margin:0.5em;
+  }
+  @include contentLightLinks;
+  a {
+    font-size: $fontSizeBase * 1.2;
+    vertical-align: middle;
+  }
+
+}
+// end close content view
+
+.header {
+  height: 44px;
+  z-index: 10;
+  position: relative;
+  background-color: $colorDarkGrey;
+  @include castShadow();
+  width:100%;
+
+  .menu-nav {
+    position:absolute;
+    top:2px;
+    left:5px;
+    width:auto;
+    .button {
+      background-color:transparent;
+      .icon-menu, .icon-cross {
+          fill:$colorWhite;
+      }
+      .menu-opener {
+        //min-width:200px;
+      }
+
+    }
+
+    &:hover,&:active {
+      .button {
+        @include resizeElement;
+      }
+    }
+
+    p {
+      color:$colorWhite;
+      position:absolute;
+      width:auto;
+      top:0px;
+      left:2rem;
+      line-height: 1;
+      font-size:$fontSizeBase * 1.2;
+      padding:0.5em;
+      cursor: pointer;
+    }
+  }
+  .header-title {
+    width:50%;
+    position:absolute;
+    top:0.5em;
+    text-align: center;
+    left:25%;
+    right:25%;
+    h2 {
+      color:$colorWhite;
+      @include fontNormal;
+      font-size:$fontSizeBase * 1.22;
+
+      &.hint {
+        font-size: $fontSizeBase * 1;
+        margin-top:-4px;
+        padding:5px;
+        background-color: $colorWarning;
+        color:$colorWhite;
+      }
+
+    }
+  }
+
+  .mainlogo {
+    right:1em;
+    display:block;
+    position:absolute;
+    color:$colorWhite;
+    p {
+      padding:0.5em 0em 0em 0em;
+      font-size:$fontSizeBase * 1.4;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      line-height:1;
+    }
+    .oereb-title {
+
+    }
+  }
+
+}
+
+// Start mainnav
+.mainnav {
+    font-size:$fontSizeBase * 1.22;
+    // height: 80000px; // scroll issues
+
+    .menu {
+      a {
+        padding:0;
+        width:90%;
+        display:inline-block;
+        vertical-align: text-top;
+
+      }
+    }
+
+    // top-bar with language
+    .top-menu {
+      padding:12px 12px 8px 12px;
+      margin-top:-4px;
+      background-color:$colorMenuBgnd;
+      margin-bottom:20px;
+      color:$colorHeadContent;
+
+
+
+      .icon {
+          font-size:$fontSizeBase * 0.8;
+          vertical-align: middle;
+          fill:$colorDarkGrey !important;
+      }
+
+
+      .lang-selector {
+
+
+        span {
+          color:$colorDarkGrey;
+          @include menuLinks();
+          a {
+            color:$colorDarkGrey;
+          }
+          .is-active {
+            display:none;
+            visibility: hidden;
+          }
+        }
+      }
+    }
+
+    // General link-styles
+    @include contentLinks;
+    .ng-binding {
+      color:$colorContent;
+
+
+    }
+    .oereb-value {
+      @include dontBreakOut();
+    }
+    .pdf-list {
+      @include dontBreakOut();
+      .small-12 {
+        max-width:90%;
+      }
+    }
+    .intro-row {
+      padding:12px 12px 30px 12px;
+      border-bottom:1px solid $colorMenuTop;
+      margin: 0;
+
+      .pdf-download {
+        .small-12 {
+          margin-top:1rem;
+        }
+      }
+
+      h1 {
+        margin:0;
+      }
+      .info-date {
+        font-size:$fontSizeBase * 0.9;
+        margin:0px 0px 20px 0px;
+        padding:0;
+        color:$colorHeadContent;
+        line-height:1;
+      }
+    }
+    .icon {
+      height: $fontSizeBase * 1.22;
+      cursor:default;
+      fill:$colorContent !important;
+      margin-left:-4px;
+    }
+
+
+
+
+    .no-property {
+      background-color: $colorWarning;
+      margin:16px;
+      p {
+        color:$colorWhite;
+        padding:8px;
+        text-align: center;
+        line-height: $fontLineHeightBase - 20%;
+        margin:0;
+      }
+    }
+
+    // accordion-navigation
+    v-accordion[class^='vAccordion'] {
+
+      // no-restrictions found
+      .no-restrictions {
+        padding-left:10px;
+        padding-bottom:10px;
+        display:inline-block;
+        padding-top:10px;
+      }
+
+      v-pane {
+        // Header
+        v-pane-header::after,
+        v-pane-header::before {
+          background-color:$colorDarkGrey;
+          width:20px;
+          margin-right:12px;
+
+        }
+        v-pane-header, 
+        .history {
+            .badge {
+              vertical-align: middle;
+              &.secondary {
+                color:$colorWhite;
+                min-width:1.4rem;
+                height:1.4rem;
+                font-size: 0.8rem;
+                font-weight: normal;
+                line-height:1.2;
+                right:40px;
+                top:calc(50% - 0.7rem);
+                position:absolute;
+                background-color: $colorDarkGrey;
+              }
+            }
+
+          border-bottom:1px solid $colorHeadContent;
+          margin-bottom:0px;
+          > div { // ng-transclude
+            padding:10px 42px 10px 12px;
+            line-height:$fontLineHeightBase - 20%;
+            position:relative;
+            color:$colorDarkGrey;
+            h1 {
+              margin:0;
+              padding:0;
+            }
+            &:hover {
+              color:$colorWhite;
+            }
+          }
+          &:hover {
+            background-color: $colorHeadContent;
+            color:$colorWhite;
+            &::after,
+            &::before {
+                background-color: $colorWhite;
+            }
+            .ng-binding {
+              color:$colorWhite !important;
+            }
+          }
+          &:focus {
+            color:$colorDarkGrey;
+          }
+        }
+        &.is-expanded { // open
+          v-pane-header {
+            border-bottom:1px solid $colorLightGrey;
+
+          }
+
+          v-pane-content[aria-hidden='false'] {
+            border-bottom:1px solid $colorMenuTop;
+          }
+          .history-item {
+            padding-top:20px;
+            li {
+              line-height:$fontLineHeightBase - 10%;
+              margin-bottom:10px;
+            }
+          }
+        }
+        v-pane-header[aria-expanded^="true"]{
+          @include fontNormal;
+          background-color: $colorHeadContent;
+          
+          > div *,
+          > div {
+            color:$colorWhite !important;
+          }
+
+          &:before {
+            background-color: $colorWhite;
+          }
+        }
+
+        // no-restrictions or missing
+        &.norestrictions,
+        &.missingrestrictions {
+          //filter:opacity(40%);
+          opacity:0.4;
+            ul {
+              li {
+                color:darken($colorMenuTop,15%);
+                padding:10px 12px 10px 12px;
+                border-bottom:1px solid $colorLightGrey;
+                font-size: $fontSizeBase * 1;
+                line-height: $fontLineHeightBase - 10%;
+              }
+            }
+            
+          v-pane-content[aria-hidden='false'] {
+            border-bottom:1px solid $colorMenuTop;
+            background-color: $colorContentBgnd;
+          }
+        }
+        // No restrictions were found
+        .norestrictions_found {
+          .no-restrictions  {
+            width:100%;
+            margin:0;
+            padding:10px 12px 12px 10px;
+            background-color: $colorContentBgnd;
+            line-height:1;
+            font-size:$fontSizeBase * 1;
+          }
+
+        }
+        &.generalinformation {
+          v-pane-content {
+            // mark it
+            background-color:$colorContentBgnd;
+          }
+        }
+        &.restrictions {
+          v-pane-header {
+            .badge {
+              &.secondary {
+                line-height:1.2;
+              }
+            }
+          }
+          v-pane-content {
+
+
+            .icon {
+              height:$fontSizeBase *1;
+            }
+            h3 {
+              font-size:$fontSizeBase * 1;
+              @include fontBold;
+              margin:15px 0px 0px 0px;
+
+            }
+
+            restriction {
+              padding-bottom:20px;
+              padding-left:32px;
+              display:block;
+
+            }
+
+            > div {
+              padding-left:0px;
+              padding-right:0px;
+              padding-bottom:0px;
+
+              // second level
+              v-accordion {
+                margin:0;
+                padding:0;
+                background-color: $colorContentBgnd;
+                v-pane {
+                  v-pane-header {
+                    padding-left:0px;
+                    font-size:$fontSizeBase * 1;
+
+                    v-pane-header {
+                       border-bottom:0px solid $colorMenuTop;
+
+
+                    }
+
+
+                  }
+                  v-pane-content {
+                    //padding-left:32px;
+                    //padding-right:32px;
+                    font-size:$fontSizeBase * 1;
+
+
+
+                    v-pane-header {
+                      padding-left:20px;
+                      border-bottom:1px solid $colorLightGrey;
+                    }
+
+                    &[aria-hidden='false'] {
+                      border:none;
+                      padding-bottom:0px;
+                      // border-bottom:1px solid $colorLightGrey;
+                    }
+                    v-pane-content {
+                      &[aria-hidden='false'] {
+                          border-bottom:0px solid $colorLightGrey;
+                      }
+                    }
+
+                    v-pane {
+                      padding-left:0;
+                      padding-right:0;
+                      &.is-expanded {
+                        border-bottom:1px solid $colorLightGrey;
+                      }
+
+                      &:last-child {
+                        v-pane-header {
+                           border-bottom:1px solid $colorLightGrey;
+                        }
+                      }
+
+                    }
+
+                    // mark it
+                    background-color:$colorContentBgnd;
+
+                    @include contentLightLinks;
+                  }
+
+
+
+                }
+              }
+
+            }
+          }
+        }
+        // Content
+        v-pane-content {
+
+          &[aria-hidden='false'] {
+            //border-bottom:1px solid $colorMenuTop;
+            padding-bottom:0px;
+          }
+
+          > div {
+            padding:0;
+          }
+
+          .pdf-download {
+            margin-top:2em;
+          }
+
+          .row {
+            line-height:$fontLineHeightBase;
+            padding-bottom:0.5em;
+            padding-top:0.5em;
+            cursor:default;
+            .oereb-label {
+              padding-right:10px;
+              color:$colorHeadContent;
+            }
+
+
+            .oereb-value {
+              padding-right:5px;
+
+            }
+            &.property-info {
+              border-bottom:1px dotted $colorMenuTop;
+              padding-left:12px;
+              padding-right:12px;
+
+            }
+
+          }
+
+        }
+      }
+    }
+
+    // history-items
+    .history {
+
+      .badge {
+        &.secondary {
+          line-height:1.2 !important;
+        }
+      }
+      v-pane-content {
+        background-color:$colorContentBgnd;
+        &[aria-hidden='false'] {
+          border-bottom:1px solid $colorMenuTop;
+        }
+      }
+      .history-item {
+        display:block;
+        ul {
+          li {
+            display:block;
+            min-height:60px;
+            padding-left:12px;
+            padding-right:12px;
+            .logo-gemeinde {
+              width:32px;
+              display:inline-block;
+              float:left;
+              margin-right:10px;
+              margin-bottom:20px;
+              background-size: contain;
+              background-repeat: no-repeat;
+              background-position: top center;
+              background-blend-mode: multiply;
+              margin-top:0px;
+              height:50px;
+            }
+            .copy-clipboard {
+             padding:0px 16px 0px 16px;
+            }
+
+
+            .history-date {
+              font-size:$fontSizeBase * 0.8;
+              color:$colorContentGrey;
+              display:block;
+              margin-top:0.3em;
+            }
+          }
+        }
+      }
+    }
+
+    // end history items
+
+
+
+    ul {
+      list-style: none;
+      margin:0;
+      padding:0;
+
+      &.contentLinks {
+
+        li {
+          padding:10px 12px 10px 12px;
+          border-bottom:1px solid $colorHeadContent;
+          cursor:pointer;
+
+          &:hover {
+            background-color: $colorHeadContent;
+            color:$colorWhite;
+          }
+        }
+      }
+
+      li {
+        margin:0;
+        padding:0;
+
+      }
+    }
+}
+
+
+
+// End Mainmenu
+
+// contentwrapper
+.content-wrapper {
+
+}
+
+.article {
+  // Navigation overlay on map
+  .menu-nav, .map-nav {
+    position:absolute;
+    left:5%;
+    top:100px;
+    z-index:3;
+
+
+    .button {
+        background-color:rgba($colorDarkGrey,0.9);
+        @include rounded;
+        display:block;
+        margin:0.5em;
+
+        &.btnMapAerial {
+          padding:0.3em;
+        }
+        .icon-aerial {
+          width:2em;
+          height:2em;
+        }
+
+
+    }
+
+  }
+  .map-nav {
+    right:5%;
+    left:auto;
+
+    .search-input {
+      display:none;
+    }
+
+    .search-open {
+      display:block;
+      position: absolute;
+      top:0;
+      width:75vw;
+      right:64px;
+      background-color:rgba($colorDarkGrey,0.9);
+      padding:10px;
+      @include rounded;
+
+      // Typeahead suggestions
+      .twitter-typeahead {
+        width: 100%;
+        .tt-suggestion {
+          margin-bottom:6px;
+        }
+        .tt-selectable {
+          cursor:pointer;
+          padding:5px;
+        }
+        .tt-cursor {
+          background-color: $colorHeadContent;
+        }
+      }
+      // End typeahead suggestions
+
+      .delete-search {
+        display:block;
+        top:18px;
+        right:18px;
+        position: absolute;
+        border-radius:0px;
+        margin:0px 0px 0px 6px;
+        padding:0;
+        background-color:transparent;
+
+        svg {
+            width:20px;
+            height:20px;
+            fill:$colorWhite;
+        }
+
+      }
+
+      input { /* important, cause of typeahead */
+        border:none !important;
+        background-color: rgba($colorDarkGrey,0.9) !important;
+        color:$colorWhite !important;
+        width: 100%;
+        margin: 0;
+      }
+
+      .tt-menu {
+        position: relative !important;
+        margin-top: 8px;
+      }
+
+      .autocomplete, .tt-suggestion {
+        color:$colorWhite;
+        font-size:$fontSizeBase * 0.9;
+        line-height: $fontSizeBase * 1.2;
+
+        @include BoxLinks;
+        p {
+            margin-bottom:0.5rem;
+        }
+      }
+    }
+  }
+
+
+    // End navbuttons
+
+  // Map Canvas
+  .map {
+    height:100vh;
+    position:relative;
+    background-color: $colorWhite;
+  }
+
+
+  // ordinary content pages
+  .contentpage {
+    display:none;
+    background-color: $colorContentBgnd;
+    position: relative;
+    margin-top:44px;
+    font-size:$fontSizeBase * 1.22;
+    height: calc(100vh - 40px);
+    overflow-y:scroll;
+    padding-bottom:8rem; // provide some space on the bottom for certain devices issue #97
+
+
+    // Logos im header
+    .partner-logo {
+
+      // Logos in header
+      .logo-bund, .logo-kanton, .logo-gemeinde, .logo-oereb {
+        display:block;
+        float:left;
+        width:50px;
+        height:50px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center center;
+        background-color: $colorContentBgnd;
+        margin-bottom:20px;
+        margin-right:20px;
+
+      }
+      .logo-oereb, .logo-kanton, .logo-bund {
+        width:300px;
+        height:100px;
+      }
+      .logo-kanton {
+        width:200px;
+        height:70px;
+      }
+      p {
+        display:block;
+        margin-left:20px;
+      }
+
+
+    }
+
+
+    &.current {
+      display:block;
+    }
+
+    // Start glossary
+    &.contentglossary {
+      .glossary-items {
+        display:flex;
+        flex-wrap: wrap;
+
+        dl {
+          flex-basis: 50%;
+          width:100%;
+          padding-right:10%;
+          margin-bottom:60px;
+
+          dd {
+              line-height:$fontLineHeightBase + 5%;
+          }
+        }
+      }
+    }
+    // end glossary
+
+    // Start imprint
+    &.contentimpressum {
+      .partner-logo {
+        margin-top:2rem;
+      }
+      .section, .partner-logo {
+        display:flex;
+        flex-wrap:wrap;
+        .section-item, .logo-item {
+          width:100%;
+          flex-basis: 50%;
+          padding-right:10%;
+        }
+        &.full-width // full width of the logos
+          .logo-item {
+            flex-basis:100%;
+          }
+      }
+    }
+
+    // end imprint
+
+
+  }
+
+  .url-link:link, .url-link:visited {
+    text-decoration:underline;
+  }
+  .url-link:hover, .url-link:active {
+    text-decoration:none;
+  }
+
+
+
+}
+// End article
+
+// Theme display
+// Theme-map
+.theme-map {
+  position:absolute;
+  top:0px;
+  left:0px;
+  width:100%;
+  @include opacityTransition;
+
+}
+
+// Hide class for the theme-map
+.oereb-fade-out {
+  opacity:0;
+  display:none !important;
+}
+
+
+// Spinners and Loaders
+.spinner-wrapper {
+  // @include showSpinnerPulse($colorBlack);
+  z-index:6000; // has to be the topmost element
+  position:absolute;
+  width:120px;
+  height:120px;
+  top:calc(50vh - 120px);
+  left:calc(50vw - 60px);
+  @include showSpinnerLoader($colorMain);
+
+}
+// END Spinners and loaders
+
+// Notifications
+
+
+.notification-wrapper {
+  -webkit-transition: all ease .5s;
+     -o-transition: all ease .5s;
+        transition: all ease .5s;
+  position:absolute;
+  z-index:10000;
+  top:0;
+  width:50%;
+  right:0px;
+
+  // notification destroyed
+  &.killed {
+    opacity: 0;
+  }
+
+  .callout {
+    position:relative;
+    border:none;
+    color:$colorWhite;
+    border-left:15px solid $colorSuccessDark;
+    background-color: $colorSuccess;
+    margin-bottom:0px;
+
+    p {
+      width:80%;
+    }
+
+    button {
+      background-color: transparent;
+      position:absolute;
+      right:10px;
+      top:10px;
+
+      &.notification-button {
+        border:1px solid $colorWhite;
+        transform: none;
+        position:inherit;
+        display: inline-block;
+        margin-bottom:0px;
+        right:auto;
+        top:auto;
+        text-transform: uppercase;
+        font-size:$fontSizeBase * 1;
+        color:$colorWhite;
+      }
+    }
+  }
+
+  // Other types of notifications
+
+  &.error {
+    .callout {
+      border-left:15px solid $colorAlertDark;
+      background-color: $colorAlert;
+    }
+  }
+  &.warning {
+    .callout {
+      border-left:15px solid $colorWarningDark;
+      background-color: $colorWarning;
+    }
+  }
+
+}

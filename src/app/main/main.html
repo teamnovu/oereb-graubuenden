@@ -1,0 +1,204 @@
+<p class="show-for-sr">
+  <a href="#mainContent" class="show-on-focus">{{ 'jump_content' | translate }}</a>
+  <a href="#mainNav"  class="show-on-focus">{{ 'jump_menu' | translate }}</a>
+</p>
+<header class="header">
+    <div data-sticky-container class="header-sticky-container">
+        <div data-sticky data-anchor="site-container" data-sticky-on="small" data-margin-top="0" class="header-sticky">
+
+
+            <div class="menu-nav">
+              <div class="lang-selector">
+
+                  <svg class="icon icon-globe">
+                      <use xlink:href="#icon-globe"></use>
+                  </svg>
+
+                  <!-- Language-Switch
+                  You can delete or add new languages by inserting the following snippet:
+
+                  <span ng-click="main.changeLanguage('it')">
+                    <a ng-click="main.changeLanguage('it')" title="Version italiano"
+                         ng-class="{'is-active': main.isCurrentLanguage('it')}">Italiano</a>
+                  </span>
+                 -->
+                  <span ng-click="main.changeLanguage('de')">
+                    <a title="Deutsche Version"
+                        ng-class="{'is-active': main.isCurrentLanguage('de')}">Deutsch</a>
+                  </span>
+                  <span>
+                    <a ng-click="main.changeLanguage('fr')" title="Version française"
+                         ng-class="{'is-active': main.isCurrentLanguage('fr')}">Français</a>
+                  </span>
+              </div>
+
+
+
+
+              <div class="menu-opener">
+                <button id="buttonShowExtract" aria-controls="menuLeftSlider"
+                        ng-click="main.toggleMenu()"
+                        class="button svg-icon btnOpenMenu">
+                    <svg class="icon" ng-class="{'icon-menu': !main.menuStatus, 'icon-cross': main.menuStatus}">
+                        <use xlink:href="" ng-href="{{ main.menuStatus ? '#icon-cross':'#icon-menu' }}"></use>
+                    </svg>
+                </button>
+                <p ng-if="!main.menuStatus" ng-click="main.toggleMenu()">{{'titleMainMenu' | translate }}</p>
+                <p ng-if="main.menuStatus" ng-click="main.toggleMenu()">{{'titleMainMenuClose' | translate }}</p>
+              </div>
+            </div>
+
+            <div ng-class="{'hidden': !main.extract}" class="show-for-medium header-title">
+                <h2><button ng-if="!details.noData" ng-click="main.centerObject()">{{"detailProperty" | translate}} {{main.extract.data.RealEstate.Number}} ({{main.extract.data.RealEstate.Municipality}})</button></h2>
+            </div>
+            <a ng-click="main.reloadPage()" title="{{'appReset' | translate}}" class="mainlogo">
+                <p>
+                <span class="oereb-title">{{'title'|translate}}</span><span>{{ 'subtitle' | translate }}</span></p>
+            </a>
+        </div>
+    </div>
+</header>
+<div id="site-container" class="site-wrapper">
+    <div class="wrapper-inner">
+
+        <div ui-view></div>
+
+
+        <div class="content-wrapper">
+            <article class="article">
+                <div class="row">
+                    <div class="small-12">
+
+                        <map ng-class="{'hidden': main.visibleContent != 'main'}"></map>
+
+                    </div>
+                </div>
+
+                <!-- *********** START CONTENT PAGE SECTIONS *********** -->
+                <!-- CONTENT: Impressum -->
+                <section class="contentpage contentimpressum" ng-class="{'current': main.visibleContent == 'imprint'}">
+                  <div class="nav-close">
+
+                    <button
+                            ng-click="main.showMain()"
+                            class="button svg-icon btnCloseContent">
+                        <svg class="icon icon-cross">
+                            <use xlink:href="#icon-cross"></use>
+                        </svg>
+
+                    </button>
+                    <a ng-click="main.showMain()" class="hide-for-small-only" href="">{{"notification_close" | translate}}</a>
+
+
+                  </div>
+                  <div class="row">
+                    <div class="columns small-12">
+                      <h1>{{'titleImprint' | translate}}</h1>
+                      <!-- SmartAuszug -->
+                      <h2>{{'mainAppTitle' | translate}}</h2>
+                      <div class="partner-logo full-width">
+                        <div class="logo-item">
+                        <div style="background-image:url('/assets/images/oerebkataster_logo_{{&#34;languageISO&#34;|translate}}.svg')" class="logo-oereb">
+                           </div>
+                           <p class="clearfix">{{"oerebText" | translate}}</p>
+                         </div>
+                      </div>
+                      <!-- Disclaimer -->
+                      <h2>{{'titleInvolvedParties' | translate }}</h2>
+                      <div class="partner-logo">
+                        <div class="logo-item">
+                        <div style="background-image:url('{{&#34;logoBundPath&#34;|translate}}')" class="logo-bund">
+                           </div>
+                           <p class="clearfix">{{"bundText" | translate}}</p>
+                         </div>
+                         <div class="logo-item">
+                        <div style="background-image:url('{{&#34;logoKantonPath&#34;|translate}}')" class="logo-kanton">
+                        </div>
+                        <p class="clearfix">{{"kantonText" | translate}}</p>
+                      </div>
+                      <div ng-if="main.extract.data.MunicipalityLogo" class="logo-item">
+
+                       <div style="background-image:url('{{main.extract.data.MunicipalityLogo}}')"
+                            class="logo-gemeinde">
+                          </div>
+                          <p class="clearfix">{{"detailCommunity" | translate}} {{main.extract.data.RealEstate.Municipality}}</p>
+                        </div>
+
+                        <div ng-if="!main.extract.data.MunicipalityLogo" class="logo-item">
+                       <div  style="background-image:url('/assets/images/gde_dummy.png')"
+                                 class="logo-gemeinde">
+                       </div>
+                       <p class="clearfix">{{"notification_noCommunity" | translate}}</p>
+                     </div>
+                     </div>
+                      <h2 ng-if="main.extract.data.MunicipalityLogo">{{'titleRemarksImprint' | translate}}</h2>
+                      <section ng-if="main.extract.data.MunicipalityLogo" class="section">
+                      <div class="section-item">
+                        <h3>{{ 'titleGeneralInformation' | translate}}</h3>
+                        <p>{{main.extract.data.GeneralInformation.LocalisedText.Text}}</p>
+                        <h3>{{ 'titleBaseData' | translate}}</h3>
+                        <p>{{main.extract.data.BaseData.LocalisedText.Text}}</p>
+                      </div>
+                      <div ng-repeat="LiabilityItem in main.extract.data.ExclusionOfLiability" class="section-item">
+                        <h3>{{LiabilityItem.Title.LocalisedText.Text}}</h3>
+                        <p>{{LiabilityItem.Content.LocalisedText.Text}}</p>
+                      </div>
+                    </section>
+                    <h2 ng-if="main.extract.data.MunicipalityLogo">{{'responsibilityContent' | translate}}</h2>
+                    <section ng-if="main.extract.data.MunicipalityLogo" class="section">
+                      <div class="section-item">
+                        <h3>{{main.extract.data.PLRCadastreAuthority.Name.LocalisedText.Text}}</h3>
+                        <p>
+
+
+                          {{main.extract.data.PLRCadastreAuthority.Street}} {{main.extract.data.PLRCadastreAuthority.Number}}<br />
+                          {{main.extract.data.PLRCadastreAuthority.PostalCode}} {{main.extract.data.PLRCadastreAuthority.City}}<br />
+                          <a href="{{main.extract.data.PLRCadastreAuthority.OfficeAtWeb}}" target="_blank" class="url-link">{{main.extract.data.PLRCadastreAuthority.Name.LocalisedText.Text}}</a>
+                        </p>
+                      </div>
+                      </section>
+
+                    </div>
+                  </div>
+                </section>
+                <!-- END CONTENT: Impressum -->
+                <!-- CONTENT: Glossary -->
+                <section class="contentpage contentglossary" ng-class="{'current': main.visibleContent == 'glossary'}">
+                  <div class="nav-close">
+
+                    <button
+                            ng-click="main.showMain()"
+                            class="button svg-icon btnCloseContent">
+                        <svg class="icon icon-cross">
+                            <use xlink:href="#icon-cross"></use>
+                        </svg>
+
+                    </button>
+                    <a ng-click="main.showMain()" class="hide-for-small-only" href="">{{"notification_close" | translate}}</a>
+
+
+                  </div>
+
+                  <div class="row">
+                    <div class="columns small-12">
+                      <h1>{{"contentTitleGlossary" | translate}}</h1>
+                      <div class="glossary-items">
+                        <dl ng-repeat="element in main.extract.data.Glossary">
+                            <dt>{{element.Title.LocalisedText.Text}}</dt>
+                            <dd>{{element.Content.LocalisedText.Text}}</dd>
+                        </dl>
+                      </div>
+                    </div>
+                  </div>
+                </section>
+                <!-- END CONTENT: Glossary -->
+
+
+                <!-- *********** END CONTENT PAGE SECTIONS *********** -->
+            </article>
+            <footer class="footer"></footer>
+
+            <loading></loading>
+        </div>
+    </div>
+</div>

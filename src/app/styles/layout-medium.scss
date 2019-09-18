@@ -1,0 +1,163 @@
+// Medium Layout
+@media screen and (min-width: $widthSmall) and (max-width: $widthLarge)  {
+
+.header {
+  .menu-nav {
+    .lang-selector {
+      display: none !important;
+    }
+  }
+}
+
+// wrapper inner
+.wrapper-inner {
+  .position-left {
+    left: ($menuOffset - $corrfactorM) * -1;
+    width:($menuOffset - $corrfactorM);
+    max-width: ($menuOffset - $corrfactorM);
+    transform:translateX(($menuOffset - $corrfactorM) * -1);
+
+     .mainnav {
+      font-size:$fontSizeBase * 1;
+
+      .icon {
+        height: 1rem;
+      }
+      .pdf-download {
+        .small-12 {
+          margin-bottom:10px;
+        }
+      }
+
+      // Header
+      v-pane-header::after,
+      v-pane-header::before {
+
+        width:14px;
+
+      }
+
+      v-pane-header {
+          .badge {
+            &.secondary {
+              right:30px;
+              line-height:1.2;
+            }
+          }
+          div { // ng-transclude
+            padding-right:20%;
+          }
+      }
+
+      h1 {
+        font-size:$fontSizeBase * 1.22;
+        line-height: $fontLineHeightBase - 20%;
+        margin-bottom:5px;
+      }
+      .info-date {
+        font-size:$fontSizeBase * 0.8;
+      }
+      v-pane-header, v-pane-content, v-pane-content h3 {
+        font-size:$fontSizeBase * 1 !important;
+        line-height: $fontLineHeightBase - 20% !important;
+      }
+      v-pane-content {
+        ul {
+          li {
+            font-size: $fontSizeBase * 0.92;
+          }
+        }
+        v-pane-content {
+          v-pane-header {
+            padding-left:10px !important;
+          }
+          restriction {
+            padding-left:22px !important;
+          }
+        }
+
+        .row {
+          .oereb-value {
+            padding-right:10px;
+
+          }
+        }
+      }
+
+      v-accordion[class^='vAccordion']  {
+        .restrictions {
+          v-pane-content {
+            > div {
+              v-accordion {
+                v-pane {
+                  v-pane-header {
+                    font-size: $fontSizeBase * .92 !important;
+                  }
+                }
+              }
+            }
+          }   
+        }
+      }
+    
+
+    }
+
+
+    // Menu is open
+    &.active-menu {
+      left:$menuOffset - $corrfactorM;
+    }
+  }
+}
+
+
+
+
+
+// map
+.map {
+  .infobox {
+    li {
+      font-size:$fontSizeBase * 1.1;
+      padding:5px 0px 5px 0px;
+    }
+  }
+}
+// end map
+
+// Nav-close-button
+.nav-close {
+  right:20px;
+  top:50px;
+}
+
+// end nav-close-button
+
+// Start glossary
+.contentglossary {
+
+
+    dl {
+      flex-basis:100% !important;
+      width:100% !important;
+      padding-right:10px !important;
+  }
+}
+// end glossary
+
+// start imprint
+.contentimpressum {
+  .section, .partner-logo {
+    .section-item, .logo-item {
+      flex-basis:100% !important;
+      width:100% !important;
+      padding-right:10px !important;
+    }
+  }
+}
+// end imprint
+
+
+
+ } // END Medium Layout
