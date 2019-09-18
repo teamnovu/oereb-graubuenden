@@ -15,13 +15,13 @@ export class LayersService {
         */
 
         // Geometrie der Kantonsgrenze
-        this.add(this.asyncCantonLayerNew())
+        this.add(this.asyncCantonLayer())
 
         // Grundbuchplan schwarz-weiss
-        this.add(this.asyncGrundbuchMapLayerNew())
+        this.add(this.asyncGrundbuchMapLayer())
 
         // Orthophoto für zweite Hintergrundansicht
-        // todo: cors error; this.add(this.asyncOrthoPhotoLayerNew());
+        // TODO: CORS error; this.add(this.asyncOrthoPhotoLayer());
     }
     /*
         Views definitions:
@@ -43,7 +43,7 @@ export class LayersService {
     }
 
 
-    asyncCantonLayerNew() {
+    asyncCantonLayer() {
         // documentation for ol.source.TileWMS: http://geoadmin.github.io/ol3/apidoc/ol.source.TileWMS.html
         let params = {
             'LAYERS': 'Kantonsgrenzen',
@@ -72,7 +72,7 @@ export class LayersService {
         return wmsOEREB;
     }
 
-    asyncGrundbuchMapLayerNew() {
+    asyncGrundbuchMapLayer() {
         // documentation for ol.source.TileWMS: http://geoadmin.github.io/ol3/apidoc/ol.source.TileWMS.html
         let params = {
             'LAYERS': 'Liegenschaften',
@@ -101,7 +101,7 @@ export class LayersService {
         return wmsOEREB;
     }
 
-    asyncOrthoPhotoLayerNew() {
+    asyncOrthoPhotoLayer() {
         return fetch('http://83.166.150.97/mapcache/wmts/1.0.0/WMTSCapabilities.xml')
             .then(function(response) {
                 let result = this.parser.read(response);
