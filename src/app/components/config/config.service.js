@@ -14,12 +14,12 @@ export class ConfigService {
 
         // default projection
         this.projection = {
-            extent: [2485869.5728, 1076443.1884, 2837076.5648, 1299941.7864],
+            extent: [2691000.0, 1098000.0, 2835000.0, 1242000.0],
             epsg: 'EPSG:2056'
         };
 
         // default center
-        this.center = [2616445.3125, 1190976.5625];
+        this.center = [2750000, 1150000];
 
         // map services
         this.services = {
