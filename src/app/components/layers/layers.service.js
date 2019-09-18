@@ -10,32 +10,19 @@ export class LayersService {
         this.resolvedLayers = [];
         this.parser = new ol.format.WMTSCapabilities();
 
-        this.globalTokenForWMTS = null;
-
-        /*
-         * Global token can be used by WMTS layers as a general configuration
-         */
-        this.globalTokenForWMTS = this.EsriToken.register('a4p_global', {
-            endpoint: 'https://www.geoservice.apps.be.ch/geoservice2/tokens/generateToken',
-            username: process.env.TOKEN_USERNAME,
-            password: process.env.TOKEN_PASSWORD,
-            interval: 59, // token for 59min
-        });
-
         /*
          * REGISTER LAYERS HERE
         */
 
         // Geometrie der Kantonsgrenze
-        this.add(this.asyncCantonLayer());
+        this.add(this.asyncCantonLayerNew())
 
         // Grundbuchplan schwarz-weiss
-        this.add(this.asyncGrundbuchMapLayer());
+        this.add(this.asyncGrundbuchMapLayerNew())
 
         // Orthophoto für zweite Hintergrundansicht
-        this.add(this.asyncOrthoPhotoLayer());
+        // todo: cors error; this.add(this.asyncOrthoPhotoLayerNew());
     }
-
     /*
         Views definitions:
      */
@@ -55,189 +42,90 @@ export class LayersService {
         }
     }
 
-    /*
-        Layer-Methods needs to return an instance of ol.layer.Tile or a Promise that will be resolved with an instance of ol.layer.Tile
-        The layers need to be registered within the constructor like so: this.add(this.layerMethod());
-     */
 
-
-    /*
-     Implementation of a WMTS - based on a Capabilites.xml
-     */
-    asyncCantonLayer() {
-        let self = this;
-        let configuration = {
-            url: 'https://www.geoservice.apps.be.ch/geoservice2/rest/services/a4p/a4p_kanton5_n_bk/MapServer/WMTS/1.0.0/WMTSCapabilities.xml',
-            token: this.globalTokenForWMTS,
+    asyncCantonLayerNew() {
+        // documentation for ol.source.TileWMS: http://geoadmin.github.io/ol3/apidoc/ol.source.TileWMS.html
+        let params = {
+            'LAYERS': 'Kantonsgrenzen',
+            'TILED': true,
+            'VERSION': '1.3.0',
+            'FORMAT': 'image/png',
+            'CRS': 'EPSG:2056'
         };
 
-        return this.waitForToken(configuration.token).then(function () {
-            return fetch(configuration.url + '?token=' + configuration.token.token).then(function (response) {
-                return response.text();
-            })
-        }).then(function (text) {
-            let result = self.parser.read(text);
-            let options = ol.source.WMTS.optionsFromCapabilities(result, {
-                layer: 'a4p_a4p_kanton5_n_bk',
-                matrixSet: 'EPSG:2056'
-            });
-            self.applyTokeToWMTSOptions(configuration.token, options);
+        let wmsOEREBSource = new this.ol.source.TileWMS(({
+            url: 'https://wms.geo.gr.ch/admineinteilung',
+            params: params,
+            serverType: 'geoserver',
+        }));
 
-            let wmtsSource = new ol.source.WMTS(options);
-            self.refreshOnInvalidToken(configuration.token, wmtsSource);
-
-            let wmtsLayer = new ol.layer.Tile({
-                opacity: 1,
-                source: wmtsSource,
-                visible: true,
-                name: 'cantonMap'
-            });
-
-            wmtsLayer.setZIndex(500);
-
-            return wmtsLayer;
-        }).catch(function(ex) {
-            self.Notification.warning('a4p_a4p_kanton5_n_bk konnte nicht geladen werden.');
+        // http://geoadmin.github.io/ol3/apidoc/ol.layer.Tile.html
+        let wmsOEREB = new this.ol.layer.Tile({
+            opacity: 1,
+            visible: true, // is visible per default
+            source: wmsOEREBSource,
+            name: 'cantonMap',
         });
+
+        wmsOEREB.setZIndex(500);
+
+        return wmsOEREB;
     }
 
-
-    /*
-     Implementation of a WMTS - based on a Capabilites.xml
-     */
-    asyncGrundbuchMapLayer() {
-        let self = this;
-        let configuration = {
-            url: 'https://www.geoservice.apps.be.ch/geoservice2/rest/services/a4p/a4p_mopube_n_bk/MapServer/WMTS/1.0.0/WMTSCapabilities.xml',
-            token: this.globalTokenForWMTS,
+    asyncGrundbuchMapLayerNew() {
+        // documentation for ol.source.TileWMS: http://geoadmin.github.io/ol3/apidoc/ol.source.TileWMS.html
+        let params = {
+            'LAYERS': 'Liegenschaften',
+            'TILED': true,
+            'VERSION': '1.3.0',
+            'FORMAT': 'image/png',
+            'CRS': 'EPSG:2056'
         };
 
-        // fetches capabilities from a service
-        return this.waitForToken(configuration.token).then(function () {
-            return fetch(configuration.url + '?token=' + configuration.token.token).then(function (response) {
-                return response.text();
-            })
-        }).then(function (text) {
-            let result = self.parser.read(text);
+        let wmsOEREBSource = new this.ol.source.TileWMS(({
+            url: 'https://wms.geo.gr.ch/amtlichevermessung',
+            params: params,
+            serverType: 'geoserver',
+        }));
 
-            // parses options based on the capabilities
-            let options = ol.source.WMTS.optionsFromCapabilities(result, {
-                layer: 'a4p_a4p_mopube_n_bk',
-                matrixSet: 'EPSG:2056'
-            });
-            self.applyTokeToWMTSOptions(configuration.token, options);
-
-            // http://geoadmin.github.io/ol3/apidoc/ol.source.WMTS.html
-            let wmtsSource = new ol.source.WMTS(options);
-            self.refreshOnInvalidToken(configuration.token, wmtsSource);
-
-            // creates ol.layer.Tile with the prepared source
-            let wmtsLayer = new ol.layer.Tile({
-                opacity: 1,
-                source: wmtsSource,
-                visible: true, // is visible per default
-                name: 'grundbuchMap' // the name is necessary for interacting with this layer, see setView method
-            });
-
-            wmtsLayer.setZIndex(2);
-
-            return wmtsLayer;
-        }).catch(function(ex) {
-            self.Notification.warning('a4p_a4p_mopube_n_bk konnte nicht geladen werden.');
+        // http://geoadmin.github.io/ol3/apidoc/ol.layer.Tile.html
+        let wmsOEREB = new this.ol.layer.Tile({
+            opacity: 1,
+            visible: true, // is visible per default
+            source: wmsOEREBSource,
+            name: 'grundbuchMap'
         });
+
+        wmsOEREB.setZIndex(1);
+
+        return wmsOEREB;
     }
 
-    /*
-     Implementation of a WMTS - based on a Capabilites.xml
-     */
-    asyncOrthoPhotoLayer() {
-        let self = this;
-        let configuration = {
-            url: 'https://www.geoservice.apps.be.ch/geoservice2/rest/services/a4p/a4p_orthofoto_n_bk/MapServer/WMTS/1.0.0/WMTSCapabilities.xml',
-            token: this.globalTokenForWMTS,
-        };
+    asyncOrthoPhotoLayerNew() {
+        return fetch('http://83.166.150.97/mapcache/wmts/1.0.0/WMTSCapabilities.xml')
+            .then(function(response) {
+                let result = this.parser.read(response);
 
-        return this.waitForToken(configuration.token).then(function () {
-            return fetch(configuration.url + '?token=' + configuration.token.token).then(function (response) {
-                return response.text();
-            })
-        }).then(function (text) {
-            let result = self.parser.read(text);
-            let options = ol.source.WMTS.optionsFromCapabilities(result, {
-                layer: 'a4p_a4p_orthofoto_n_bk',
-                matrixSet: 'EPSG:2056'
-            });
-            self.applyTokeToWMTSOptions(configuration.token, options);
-
-            let wmtsSource = new ol.source.WMTS(options);
-            self.refreshOnInvalidToken(configuration.token, wmtsSource);
-
-            let wmtsLayer = new ol.layer.Tile({
-                opacity: 1,
-                source: wmtsSource,
-                visible: false,
-                name: 'orthoPhoto'
-            });
-
-            wmtsLayer.setZIndex(3);
-
-            return wmtsLayer;
-        }).catch(function(ex) {
-            self.Notification.warning('a4p_a4p_orthofoto_n_bk konnte nicht geladen werden.');
-        });
-    }
-
-    /*
-    Example Implementation of a WMS
-   */
-    exampleWMSWithEsri() {
-        let configuration = {
-            url: 'https://www.geoservice2-test.apps.be.ch/geoservice2/services/a4p/a4p_hintergrund_grau_n_bk_testmb/MapServer/WMSServer?',
-            token: this.EsriToken.register('a4p_grau', {
-                endpoint: 'https://www.geoservice2-test.apps.be.ch/geoservice2/tokens/generateToken',
-                username: 'example_login',
-                password: 'example_password',
-            }),
-        };
-
-        return this.waitForToken(configuration.token).then((access_token) => {
-            // documentation for ol.source.TileWMS: http://geoadmin.github.io/ol3/apidoc/ol.source.TileWMS.html
-            let params = {
-                'LAYERS': '0,1,2,3,4,5,6,7,8,9,10,11,12', // list of layers: https://www.geoservice2-test.apps.be.ch/geoservice2/rest/services/a4p/a4p_hintergrund_grau_n_bk/MapServer/layers
-                'TILED': true,
-                'VERSION': '1.3.0',
-                'FORMAT': 'image/png',
-                'CRS': 'EPSG:2056'
-            };
-
-            if (access_token) {
-                params.token = access_token;
-            }
-
-            let wmsOEREBSource = new this.ol.source.TileWMS(({
-                url: configuration.url,
-                params: params,
-                serverType: 'geoserver',
-            }));
-
-            if (configuration.token) {
-                configuration.token.onUpdate(function (token) {
-                    params.token = token;
-                    wmsOEREBSource.updateParams({token: token});
+                let options = ol.source.WMTS.optionsFromCapabilities(result, {
+                    layer: 'a4p_a4p_orthofoto_n_bk',
+                    matrixSet: 'EPSG:2056'
                 });
-            }
+                this.applyTokeToWMTSOptions(configuration.token, options);
 
-            // http://geoadmin.github.io/ol3/apidoc/ol.layer.Tile.html
-            let wmsOEREB = new this.ol.layer.Tile({
-                opacity: 1,
-                visible: true, // is visible per default
-                source: wmsOEREBSource,
-            });
+                let wmtsSource = new ol.source.WMTS(options);
+                self.refreshOnInvalidToken(configuration.token, wmtsSource);
 
-            wmsOEREB.setZIndex(1);
+                let wmtsLayer = new ol.layer.Tile({
+                    opacity: 1,
+                    source: wmtsSource,
+                    visible: false,
+                    name: 'orthoPhoto'
+                });
 
-            return wmsOEREB;
-        });
+                wmtsLayer.setZIndex(3);
+
+                return wmtsLayer;
+            })
     }
 
     /*
@@ -295,76 +183,5 @@ export class LayersService {
     add(layer) {
         this.layers.push(layer);
     }
-
-    /**
-     * wait for token to be fetched
-     * @param {EsriToken} token
-     * @returns {Promise}
-     */
-    waitForToken(token) {
-        if (token && !token.lastUpdate) {
-            return new Promise(function (resolve, reject) {
-                token.onUpdateOnce(resolve)
-            })
-        }
-
-        return Promise.resolve();
-    }
-
-    /**
-     * configure urls to contain esri token
-     *
-     * @param {EsriToken} token
-     * @param {olx.source.WMTSOptions} options
-     */
-    applyTokeToWMTSOptions(token, options) {
-        if (!token) return;
-
-        for (let i = 0; i < options.urls.length; i++) {
-            options.urls[i] += 'token=' + token.token;
-        }
-
-        // if token is expired, do hard reload
-        token.onUpdate(() => {
-            window.location.reload();
-        });
-    }
-
-    /**
-     * listen for errors and triggers a hard reload
-     *
-     * @param {EsriToken} token
-     * @param {ol.source.WMTS} source
-     */
-    refreshOnInvalidToken(token, source) {
-        if (!token) return;
-
-        let threshold = 10;
-        let errCount = 0;
-
-        source.on('tileloaderror', function (err) {
-            // after min 10 sec
-            if (token.token && token.sinceUpdate() > 10000) {
-                if (errCount++ === threshold || errCount > threshold + 50) {
-                    // check if url is valid
-                    fetch(err.tile.j) // FIXME (hacky) this depends on the current openlayers build
-                        .then((response) => {
-                            if (response.status === 498 || response.status === 499) { // invalid esri token
-                                window.location.reload();
-                                return;
-                            }
-                            if (response.status === 200 || response.status === 404) {
-                                errCount = 0; // reset threshold
-                                return;
-                            }
-                        })
-                        .catch((e) => {
-                            console.error(e)
-                        })
-                }
-            }
-        });
-    }
 }
-
 
