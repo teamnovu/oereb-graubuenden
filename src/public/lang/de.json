@@ -91,8 +91,8 @@
     "responsibilityBackend": "Technische Realisierung",
     "responsibilityUX": "User Experience und Usability",
 
-    "oerebServiceNotAvailable" : "Der OEREB Service des Kanton Bern ist derzeit nicht erreichbar.",
-    "oerebService500": "Der OEREB Service des Kanton Berns hat keine Daten zu diesem Grundstück.",
+    "oerebServiceNotAvailable" : "Der OEREB Service des Kanton Graubünden ist derzeit nicht erreichbar.",
+    "oerebService500": "Der OEREB Service des Kanton Graubündens hat keine Daten zu diesem Grundstück.",
     "oerebService204": "Kein Grundstück mit dieser ID.",
 
     "gstart" : {
