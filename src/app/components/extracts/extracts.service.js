@@ -1,15 +1,17 @@
 export class ExtractsService {
-    constructor($location, Loading, OEREB, Notification, localStorageService, Helpers, $filter) {
+    constructor($location, Loading, OEREB, Notification, localStorageService, Helpers, $filter, $translate, Config) {
 
         'ngInject';
 
         this.$filter = $filter;
         this.Helpers = Helpers;
         this.$location = $location;
+        this.$translate = $translate;
         this.Loading = Loading;
         this.OEREB = OEREB;
         this.Notification = Notification;
         this.localStorageService = localStorageService;
+        this.Config = Config;
 
         this.extracts = [];
         this.observers = [];
@@ -107,16 +109,16 @@ export class ExtractsService {
 
         // loop all concerned themes and get their restrictions
         newExtract.ConcernedTheme.map((theme) => {
-            let restrictions = null;
-
-            let filteredRestrictions = allRestrictions.filter(restriction => {
+            let restrictions = allRestrictions.filter(restriction => {
                 return restriction.Theme.Code === theme.Code;
             });
 
             // check if the given theme has subthemes
-            let hasChildren = filteredRestrictions.some(restriction => restriction.SubTheme);
+            let hasChildren = restrictions.some(restriction => restriction.SubTheme);
 
-            restrictions = filteredRestrictions;
+            restrictions = this.combineByTypeCode(restrictions);
+            restrictions = this.orderLandUsePlans(restrictions, theme);
+
             if (! hasChildren) {
                 return Object.assign(theme, {
                     values: restrictions,
@@ -125,13 +127,74 @@ export class ExtractsService {
             }
 
             return Object.assign(theme, {
-                SubThemes: this.groupBy(filteredRestrictions, restriction => restriction.SubTheme),
+                SubThemes: this.groupBy(restrictions, restriction => restriction.SubTheme),
                 hasChildren: true,
             });
 
-        })
+        });
 
         return newExtract;
+    }
+
+    combineByTypeCode(restrictions) {
+        return Object.values(restrictions.reduce((acc, restriction) => {
+            if (! acc[restriction.TypeCode]) {
+                acc[restriction.TypeCode] = restriction;
+                return acc;
+            }
+
+            const accumulation = acc[restriction.TypeCode];
+
+            if (accumulation.NrOfPoints) {
+                accumulation.NrOfPoints += restriction.NrOfPoints
+            }
+            if (accumulation.PartInPercent) {
+                accumulation.PartInPercent += restriction.PartInPercent
+            }
+            if (accumulation.AreaShare) {
+                accumulation.AreaShare += restriction.AreaShare
+            }
+            if (accumulation.LengthShare) {
+                accumulation.LengthShare += restriction.LengthShare
+            }
+
+            const combineList = function (listName, equalOperator) {
+                if (!accumulation.hasOwnProperty(listName) || !restriction.hasOwnProperty(listName)) {
+                    return;
+                }
+
+                restriction[listName].forEach(listItem => {
+                    if (!accumulation[listName].find(compareItem => equalOperator(compareItem, listItem))) {
+                        accumulation[listName].push(listItem)
+                    }
+                });
+            };
+
+            combineList('LegalProvisions', (a, b) => {
+                return a.TextAtWeb[0].Text === b.TextAtWeb[0].Text &&
+                    a.Title[0].Text === b.Title[0].Text &&
+                    a.DocumentType === b.DocumentType;
+            });
+
+            return acc;
+        }, {}));
+    }
+
+    orderLandUsePlans(restrictions, theme) {
+        if (theme.Code !== 'LandUsePlans') {
+            return restrictions;
+        }
+
+        const lang = this.$translate.use() !== undefined ? this.$translate.use() : this.$translate.proposedLanguage();
+        const customSortList = this.Config.customSortList.map(pair => pair[lang]).reverse()
+
+        const getPos = function (restriction) {
+            return customSortList.indexOf(restriction.SubTheme)
+        };
+
+        return restrictions.sort((a, b) => {
+            return getPos(b) - getPos(a)
+        })
     }
 
     setCurrent(egrid, reloading = false) {
