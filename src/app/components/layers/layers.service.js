@@ -21,7 +21,7 @@ export class LayersService {
         this.add(this.asyncGrundbuchMapLayer())
 
         // Orthophoto für zweite Hintergrundansicht
-        // TODO: CORS error; this.add(this.asyncOrthoPhotoLayer());
+        this.add(this.asyncOrthoPhotoLayer());
     }
     /*
         Views definitions:
@@ -102,18 +102,21 @@ export class LayersService {
     }
 
     asyncOrthoPhotoLayer() {
+        var self = this;
+
         return fetch('http://83.166.150.97/mapcache/wmts/1.0.0/WMTSCapabilities.xml')
-            .then(function(response) {
-                let result = this.parser.read(response);
+            .then(function (response) {
+                return response.text();
+            })
+            .then(function(text) {
+                let result = self.parser.read(text);
 
                 let options = ol.source.WMTS.optionsFromCapabilities(result, {
-                    layer: 'a4p_a4p_orthofoto_n_bk',
+                    layer: 'Luftbild',
                     matrixSet: 'EPSG:2056'
                 });
-                this.applyTokeToWMTSOptions(configuration.token, options);
 
                 let wmtsSource = new ol.source.WMTS(options);
-                self.refreshOnInvalidToken(configuration.token, wmtsSource);
 
                 let wmtsLayer = new ol.layer.Tile({
                     opacity: 1,
