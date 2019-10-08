@@ -2,13 +2,14 @@
 
     "languages" : {
         "german": "Deutsch",
-        "french": "Français"
+        "romansh": "Rumantsch",
+        "italian": "Italiano"
     },
 
     "subtitle": "Kataster",
     "title": "ÖREB-",
     "appReset": "Alles Zurücksetzen",
-    "mainAppTitle": "ÖREB-App",
+    "mainAppTitle": "ÖREB-Viewer",
     "mainTitle": "Auszug aus dem ÖREB-Kataster",
     "titleMainMenu": "Menü",
     "titleMainMenuClose": "Menü",
@@ -21,7 +22,7 @@
     "noRestrictions": "Keine",
     "bundlogo": "Logo der Schweizerischen Eidgenossenschaft",
     "bundText": "",
-    "kantonlogo": "Logo des Kantons Bern",
+    "kantonlogo": "Logo des Kantons Graubünden",
     "kantonText": "",
     "active": "aktiv",
     "jump_content": "Zum Inhalt springen",
@@ -83,9 +84,9 @@
     "amount": "Anzahl",
     "markerAlt":"Markiertes Grundstück",
     "languageISO": "de",
-    "oerebText": "Dies ist der SmartAuszug zum Kataster der öffentlich-rechtlichen Eigentumsbeschränkungen (ÖREB)",
-    "logoBundPath": "https://files.be.ch/bve/agi/oereb/logos/eidgenossenschaft.png",
-    "logoKantonPath": "https://files.be.ch/bve/agi/oereb/logos/kanton_BE.gif",
+    "oerebText": "Dies ist der dynamische Auszug des Kataster der öffentlich-rechtlichen Eigentumsbeschränkungen (ÖREB-Kataster).",
+    "logoBundPath": "http://olivin3.gis.gr.ch/assets/images/logo_confederation.png",
+    "logoKantonPath": "http://olivin3.gis.gr.ch/assets/images/logo_canton.png",
     "responsibilityContent": "Katasterverantwortliche Stelle",
     "responsibilityDesign": "Gestaltung und Frontend-Design",
     "responsibilityBackend": "Technische Realisierung",
